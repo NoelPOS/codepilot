@@ -38,7 +38,7 @@ export default function PreviewPage() {
   const title = workspace.title || workspace.messages?.[0]?.content?.slice(0, 40) || "Preview";
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[calc(100vh-5rem)]">
       {/* Minimal header */}
       <div className="flex items-center justify-between px-5 py-2.5 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shrink-0">
         <div className="flex items-center gap-2.5">
@@ -70,9 +70,9 @@ export default function PreviewPage() {
             externalResources: ["https://cdn.tailwindcss.com"],
           }}
         >
-          <SandpackLayout className="!border-none !h-full">
+          <SandpackLayout className="!border-none !h-full flex flex-col">
             <SandpackPreview
-              style={{ height: "100%", width: "100%" }}
+              style={{ height: "100%", flex: 1 }}
               showNavigator
               showRefreshButton
             />
