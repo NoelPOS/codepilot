@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# secrets
+client_secret_*.json
+stripe_out.json
+*.local
+! .env.local
+.env.local
