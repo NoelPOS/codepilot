@@ -1,12 +1,16 @@
+"use client";
+
 import CodeView from "@/components/Workspace/CodeView";
-import Sidebar from "@/components/Workspace/Sidebar";
-import React from "react";
+import ChatPanel from "@/components/Workspace/ChatPanel";
+import React, { useState } from "react";
 
 const Workspace = () => {
+  const [layoutMode, setLayoutMode] = useState("split"); // "split" | "floating"
+
   return (
-    <div className="flex flex-row max-h-[calc(100vh-5rem)] px-10 gap-4">
-      <Sidebar />
-      <CodeView />
+    <div className={`flex ${layoutMode === "split" ? "flex-col" : "flex-row relative"} max-h-[calc(100vh-5rem)] px-10 gap-4`}>
+      <CodeView layoutMode={layoutMode} setLayoutMode={setLayoutMode} />
+      <ChatPanel layoutMode={layoutMode} />
     </div>
   );
 };

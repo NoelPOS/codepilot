@@ -1,7 +1,9 @@
 import { ThemeProvider } from "@/providers/theme-provider";
 import "./globals.css";
 import { Header } from "@/components/Navbar/Header";
-import { GlobalProvidor } from "@/providers/GlobalProvidor";
+import { GlobalProvider } from "@/providers/GlobalProvidor";
+import { Toaster } from "sonner";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,17 +14,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <GlobalProvidor>
+        <GlobalProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster richColors position="top-right" />
             <Header />
-            {children}
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
           </ThemeProvider>
-        </GlobalProvidor>
+        </GlobalProvider>
       </body>
     </html>
   );

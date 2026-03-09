@@ -1,70 +1,83 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./toggle-theme-button";
 import { UserContext } from "@/context/UserContext";
-
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { KeyRound, LayoutDashboard, Check } from "lucide-react";
+import { ApiKeyDialog } from "@/components/Home/ApiKeyDialog";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { useApiKey } from "@/hooks/useApiKey";
 
 export const Header = () => {
   const { user, setUser } = useContext(UserContext);
+  const [showKeyDialog, setShowKeyDialog] = useState(false);
+  const { apiKey, saveApiKey } = useApiKey();
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      // console.log(tokenResponse);
-      const userInfo = await axios.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        { headers: { Authorization: "Bearer " + tokenResponse.access_token } }
-      );
-      // console.log(userInfo);
-      setUser(userInfo.data);
-      const user = await createUser({
-        name: userInfo.data.name,
-        email: userInfo.data.email,
-        picture: userInfo.data.picture,
-        uid: uuid4(),
-      });
-      console.log("Before creation:", user);
-      localStorage.setItem("user", JSON.stringify(user));
-      console.log("created user", user);
-    },
-    onError: (errorResponse) => console.log(errorResponse),
-  });
+  const { login: googleLogin } = useGoogleAuth();
+
+  const handleSignOut = () => {
+    setUser(null);
+  };
+
   return (
-    <div>
-      <header className="flex justify-between px-10 py-5">
-        <div>LOGO</div>
-        <div className="flex items-center gap-4">
+    <>
+      <header className="flex justify-between items-center px-10 py-4 border-b border-gray-200 dark:border-gray-800">
+        {/* Logo / Brand */}
+        <Link href="/" className="font-bold text-xl tracking-tight">
+          CodePilot
+        </Link>
+
+        <div className="flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-4">
-              <Avatar className="w-10 h-10">
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
+                </Button>
+              </Link>
+
+              {/* API Key button */}
+              <Button
+                variant={apiKey ? "default" : "outline"}
+                size="sm"
+                className={`gap-1.5 transition-all duration-300 ${apiKey ? "bg-green-600 hover:bg-green-700 text-white border-none" : ""}`}
+                onClick={() => setShowKeyDialog(true)}
+              >
+                {apiKey ? <Check className="w-3.5 h-3.5" /> : <KeyRound className="w-3.5 h-3.5" />}
+                {apiKey ? "Key Active" : "Add API Key"}
+              </Button>
+
+              <Avatar className="w-8 h-8">
                 <AvatarImage className="rounded-full" src={user?.picture} />
-                <AvatarFallback className="rounded-full">
+                <AvatarFallback className="rounded-full bg-gray-200 text-sm font-medium">
                   {user?.name?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
 
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setUser(null);
-                  localStorage.removeItem("user");
-                }}
-              >
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
                 Sign Out
               </Button>
-            </div>
+            </>
           ) : (
-            <Button variant="outline" onClick={() => googleLogin()}>
+            <Button variant="outline" size="sm" onClick={() => googleLogin()}>
               Sign In
             </Button>
           )}
+
           <ModeToggle />
         </div>
       </header>
-    </div>
+
+      <ApiKeyDialog
+        open={showKeyDialog}
+        onOpenChange={setShowKeyDialog}
+        onSave={saveApiKey}
+        existingKey={apiKey}
+      />
+    </>
   );
 };

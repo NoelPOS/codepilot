@@ -5,46 +5,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Button } from "../ui/button";
-import { UserContext } from "@/context/UserContext";
-import { useMutation } from "convex/react";
-import uuid4 from "uuid4";
-import { api } from "@/convex/_generated/api";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 
 export const SignInDiaglog = ({ open, onOpenChange }) => {
-  const { user, setUser } = useContext(UserContext);
-  const createUser = useMutation(api.user.createUser);
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      // console.log(tokenResponse);
-      const userInfo = await axios.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        { headers: { Authorization: "Bearer " + tokenResponse.access_token } }
-      );
-      setUser(userInfo.data);
-      onOpenChange(false);
-
-      const user = await createUser({
-        name: userInfo.data.name,
-        email: userInfo.data.email,
-        picture: userInfo.data.picture,
-        uid: uuid4(),
-      });
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          ...userInfo.data,
-          id: user,
-        })
-      );
-    },
-    onError: (errorResponse) => console.log(errorResponse),
+  const { login: googleLogin } = useGoogleAuth({
+    onSuccess: () => onOpenChange(false),
   });
   return (
     <div>
