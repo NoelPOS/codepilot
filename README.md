@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CodePilot
+
+CodePilot is an advanced, AI-powered web development platform designed to streamline the process of building, running, and deploying full-stack web applications. Built with a focus on developer experience and security, it leverages the latest web technologies to provide a seamless "prompt-to-code" workflow.
+
+## Key Features
+
+### Bring Your Own Key (BYOK) Architecture
+CodePilot implements a secure BYOK pattern. Users provide their own Gemini API keys, which are stored exclusively within the browser's local storage. This ensures that sensitive credentials never reach the server, providing maximum security and allowing for decentralized AI usage costs.
+
+### Real-time Interactive Preview
+The platform integrates a live in-browser preview environment using CodeSandbox Sandpack. As the AI generates code, the preview updates in real-time, allowing users to see their application come to life instantly.
+
+### Intelligent Code Generation
+Leveraging the Google Gemini model, CodePilot can generate complex React components, utility functions, and complete project structures based on simple natural language prompts.
+
+### Flexible Workspace Layouts
+The workspace features multiple viewing modes, including high-density split views and immersive floating layouts, tailored for both focused coding and rapid prototyping.
+
+### Enterprise-Grade Security and Authentication
+Integrated with Google OAuth for secure user authentication and Convex for a robust, real-time database backend that persists user workspaces and project history.
+
+## Technology Stack
+
+### Core Framework
+- Next.js 15 (App Router)
+- React 19
+- Tailwind CSS
+
+### Backend and Database
+- Convex (Real-time Backend-as-a-Service)
+
+### AI and Code Rendering
+- Google Gemini AI
+- Sandpack (Interactive Code Environment)
+
+### Integrations
+- Stripe (Subscription and Billing)
+- Google OAuth (Authentication)
+- Lucide React (Iconography)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18.x or later
+- A Convex account
+- A Google Cloud project for OAuth
+- A Stripe account for billing features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/NoelPOS/codepilot.git
+   cd codepilot
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Configure Environment Variables:
+   Create a `.env.local` file in the root directory and add the following:
+   ```env
+   NEXT_PUBLIC_CONVEX_URL=your_convex_url
+   CONVEX_DEPLOYMENT=your_deployment_name
+   NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_key
+   STRIPE_SECRET_KEY=your_stripe_secret
+   ```
 
-## Learn More
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The project is optimized for deployment on the Vercel platform. Ensure all environment variables are correctly configured in the Vercel dashboard and that the Convex production deployment is linked.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the MIT License.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
